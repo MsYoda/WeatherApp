@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:test_task/core_ui/theme/app_theme.dart';
+import 'package:test_task/di.dart';
 import 'package:test_task/navigation/router.dart';
 
-void main() {
+void main() async {
+  initDependencies();
+  await appLocator.allReady();
   runApp(const MyApp());
 }
 

@@ -60,7 +60,7 @@ class WeatherByTimeCard extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   heightFactor: 0.6,
-                  widthFactor: 0.6,
+                  widthFactor: 0.7,
                   child: Image.asset(
                     AppImages.weatherIcon(weatherInfo.conditionType),
                     width: 150,
@@ -82,22 +82,22 @@ class WeatherByTimeCard extends StatelessWidget {
           const SizedBox(height: AppDimens.largeSpace),
           _buildDataRow(
             name: 'Time',
-            value: DateFormat('hh:00').format(weatherInfo.dateTime),
+            value: DateFormat('HH:00').format(weatherInfo.dateTime),
           ),
           const SizedBox(height: AppDimens.smallSpace),
           _buildDataRow(
             name: 'Weather',
-            value: 'Cloudy',
+            value: weatherInfo.conditionDescription,
           ),
           const SizedBox(height: AppDimens.smallSpace),
           _buildDataRow(
             name: 'Humidity',
-            value: '20%',
+            value: '${weatherInfo.humidity}%',
           ),
           const SizedBox(height: AppDimens.smallSpace),
           _buildDataRow(
             name: 'Wind',
-            value: '8mph',
+            value: '${weatherInfo.windSpeed} mph',
           )
         ],
       ),

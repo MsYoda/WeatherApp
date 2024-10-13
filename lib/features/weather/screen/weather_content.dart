@@ -3,20 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_task/core_ui/theme/app_dimens.dart';
 import 'package:test_task/core_ui/theme/app_fonts.dart';
-import 'package:test_task/domain/models/weather_info.dart';
 import 'package:test_task/features/weather/bloc/weather_bloc.dart';
+import 'package:test_task/features/weather/bloc/weather_event.dart';
 import 'package:test_task/features/weather/bloc/weather_state.dart';
 import 'package:test_task/features/weather/widgets/current_weather_view.dart';
 import 'package:test_task/features/weather/widgets/weather_by_time_card.dart';
 
-class WeatherContent extends StatelessWidget {
+class WeatherContent extends StatefulWidget {
   const WeatherContent({
     super.key,
   });
 
   @override
+  State<WeatherContent> createState() => _WeatherContentState();
+}
+
+class _WeatherContentState extends State<WeatherContent> {
+  late final TextEditingController _cityInputController;
+
+  @override
+  void initState() {
+    super.initState();
+    _cityInputController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _cityInputController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final bloc = context.read<WeatherBloc>();
     return BlocBuilder<WeatherBloc, WeatherState>(
       builder: (context, state) {
         return SingleChildScrollView(
@@ -44,6 +64,16 @@ class WeatherContent extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: AppDimens.smallSpace),
                 width: 600,
                 child: TextField(
+                  controller: _cityInputController,
+                  onChanged: (value) => bloc.add(
+                    WeatherCityInputChanged(value: value),
+                  ),
+                  onSubmitted: (value) {
+                    _cityInputController.clear();
+                    bloc.add(
+                      WeatherCityInputSubmitted(),
+                    );
+                  },
                   decoration: InputDecoration(
                     prefixIcon: const Icon(
                       Icons.search,
@@ -61,70 +91,71 @@ class WeatherContent extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: AppDimens.largeSpace2x),
-              CurrentWeatherView(
-                weatherInfo: WeatherInfo(
-                  temperature: 9,
-                  maxTemperature: 15,
-                  minTemperature: 8,
-                  conditionType: '10d',
-                  humidity: 10,
-                  conditionDescription: 'Cloudy',
-                  windSpeed: 7.8,
-                  city: 'Minsk',
-                  dateTime: DateTime(
-                    2024,
-                    10,
-                    12,
+              if (state is WeatherLoaded) ...[
+                const SizedBox(height: AppDimens.largeSpace2x),
+                CurrentWeatherView(
+                  city: state.city,
+                  weatherInfo: state.currentWeather,
+                  onRefreshButtonPressed: () => bloc.add(WeatherRefresh()),
+                ),
+                const SizedBox(
+                  height: AppDimens.largeSpace2x,
+                ),
+                Text(
+                  'Weather forecast',
+                  style: AppFonts.openSans(
+                    fontSize: 18,
+                    color: colors.primaryContainer.withOpacity(1),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: AppDimens.largeSpace2x,
-              ),
-              Text(
-                'Todays weather',
-                style: AppFonts.openSans(
-                  fontSize: 18,
-                  color: colors.primaryContainer.withOpacity(1),
-                ),
-              ),
-              const SizedBox(height: AppDimens.smallSpace),
-              CarouselSlider(
-                items: [
-                  for (int i = 9; i < 12; i++)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: WeatherByTimeCard(
-                        weatherInfo: WeatherInfo(
-                          temperature: 9,
-                          maxTemperature: 15,
-                          minTemperature: 8,
-                          conditionType: '10d',
-                          humidity: 10,
-                          conditionDescription: 'Cloudy',
-                          windSpeed: 7.8,
-                          city: 'Minsk',
-                          dateTime: DateTime(
-                            2024,
-                            10,
-                            12,
-                            i,
-                          ),
+                const SizedBox(height: AppDimens.smallSpace),
+                CarouselSlider(
+                  items: [
+                    for (int i = 0; i < state.weatherForecast.length; i++)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: WeatherByTimeCard(
+                          weatherInfo: state.weatherForecast[i],
                         ),
                       ),
-                    ),
-                ],
-                options: CarouselOptions(
-                  height: 300,
-                  enlargeFactor: 0.6,
-                  viewportFraction: 0.25 * 1850 / MediaQuery.sizeOf(context).width,
-                  enlargeCenterPage: true,
-                  enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                  enableInfiniteScroll: false,
+                  ],
+                  options: CarouselOptions(
+                    height: 300,
+                    enlargeFactor: 0.6,
+                    viewportFraction: 0.25 * 1850 / MediaQuery.sizeOf(context).width,
+                    enlargeCenterPage: true,
+                    enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                    enableInfiniteScroll: false,
+                  ),
                 ),
-              ),
-              const SizedBox(height: AppDimens.defaultSpace),
+                const SizedBox(height: AppDimens.defaultSpace),
+              ] else if (state is WeatherLoading)
+                Padding(
+                  padding: const EdgeInsets.only(top: 250),
+                  child: CircularProgressIndicator(
+                    color: colors.primaryContainer,
+                  ),
+                )
+              else if (state is WeatherError) ...[
+                const SizedBox(height: AppDimens.largeSpace2x),
+                Text(
+                  'Oops, something went wrong',
+                  textAlign: TextAlign.start,
+                  style: AppFonts.openSans(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w400,
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                ),
+                Text(
+                  'Try to check your input and try again',
+                  textAlign: TextAlign.start,
+                  style: AppFonts.openSans(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.75),
+                  ),
+                ),
+              ]
             ],
           ),
         );

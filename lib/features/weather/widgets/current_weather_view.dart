@@ -3,12 +3,18 @@ import 'package:intl/intl.dart';
 import 'package:test_task/core_ui/theme/app_dimens.dart';
 import 'package:test_task/core_ui/theme/app_fonts.dart';
 import 'package:test_task/core_ui/theme/app_images.dart';
+import 'package:test_task/domain/models/cached_city.dart';
 import 'package:test_task/domain/models/weather_info.dart';
 
 class CurrentWeatherView extends StatelessWidget {
+  final CachedCity city;
   final WeatherInfo weatherInfo;
+  final VoidCallback onRefreshButtonPressed;
+
   const CurrentWeatherView({
     required this.weatherInfo,
+    required this.city,
+    required this.onRefreshButtonPressed,
     super.key,
   });
 
@@ -85,7 +91,7 @@ class CurrentWeatherView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Last update was 1h ago',
+                'Last update was ${DateTime.now().difference(city.timestamp)} ago',
                 style: AppFonts.openSans(
                   fontSize: 14,
                   color: Theme.of(context).colorScheme.primaryContainer,
@@ -93,7 +99,7 @@ class CurrentWeatherView extends StatelessWidget {
               ),
               const SizedBox(width: AppDimens.smallSpace),
               IconButton(
-                onPressed: () {},
+                onPressed: onRefreshButtonPressed,
                 icon: Icon(
                   Icons.refresh,
                   color: Theme.of(context).colorScheme.primaryContainer,
@@ -108,7 +114,7 @@ class CurrentWeatherView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            weatherInfo.city,
+            '${city.name}, ${city.countryCode}',
             textAlign: TextAlign.start,
             style: AppFonts.openSans(
               fontSize: 30,

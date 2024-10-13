@@ -6,7 +6,6 @@ class WeatherInfo {
   final String conditionType;
   final String conditionDescription;
   final double windSpeed;
-  final String city;
   final DateTime dateTime;
 
   const WeatherInfo({
@@ -17,7 +16,6 @@ class WeatherInfo {
     required this.temperature,
     required this.conditionDescription,
     required this.windSpeed,
-    required this.city,
     required this.dateTime,
   });
 }
