@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_task/domain/exceptions/app_exception.dart';
 import 'package:test_task/domain/use_cases/city_forecast_usecase.dart';
 import 'package:test_task/features/weather/bloc/weather_event.dart';
 import 'package:test_task/features/weather/bloc/weather_state.dart';
@@ -19,7 +18,9 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
   void _onWeatherRefresh(WeatherRefresh event, Emitter<WeatherState> emit) async {
     try {
-      final data = await _cityForecastUseCase.refreshData();
+      final data = await _cityForecastUseCase.refreshData(
+        event.lang,
+      );
       if (data == null) {
         emit(
           WeatherInitial(cityInput: state.cityInput),
@@ -35,7 +36,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
           weatherForecast: data.forecast,
         ),
       );
-    } on AppException {
+    } catch (e) {
       emit(
         WeatherInitial(cityInput: state.cityInput),
       );
@@ -57,7 +58,10 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       ),
     );
     try {
-      final data = await _cityForecastUseCase.getByCityName(state.cityInput);
+      final data = await _cityForecastUseCase.getByCityName(
+        state.cityInput,
+        event.lang,
+      );
       emit(
         WeatherLoaded(
           cityInput: state.cityInput,
@@ -66,7 +70,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
           weatherForecast: data.forecast,
         ),
       );
-    } on AppException {
+    } catch (e) {
       emit(
         WeatherError(
           cityInput: state.cityInput,

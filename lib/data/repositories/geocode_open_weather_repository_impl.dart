@@ -1,18 +1,22 @@
+import 'package:test_task/data/datasource/geonames_datasource.dart';
 import 'package:test_task/data/mappers/city_mapper.dart';
-import 'package:test_task/data/datasource/open_weather_datasource.dart';
 import 'package:test_task/domain/models/city.dart';
 import 'package:test_task/domain/repositories/geocode_repository.dart';
 
 class GeocodeOpenWeatherRepositoryImpl implements GeocodeRepository {
-  final OpenWeatherDatasource _openWeatherProvider;
+  final GeonamesDatasource _geonamesDatasource;
 
   GeocodeOpenWeatherRepositoryImpl({
-    required OpenWeatherDatasource openWeatherProvider,
-  }) : _openWeatherProvider = openWeatherProvider;
+    required GeonamesDatasource geonamesDatasource,
+  }) : _geonamesDatasource = geonamesDatasource;
 
   @override
-  Future<City> findCityByName(String name) async {
-    final entity = await _openWeatherProvider.findCityByName(name);
-    return CityMapper.fromEntity(entity);
+  Future<List<City>> findCitiesByName(String name, String lang, int limit) async {
+    final entitiesList = await _geonamesDatasource.findCitiesStartWith(
+      cityName: name,
+      lang: lang,
+      limit: limit,
+    );
+    return entitiesList.map(CityMapper.fromEntity).toList();
   }
 }

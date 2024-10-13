@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:test_task/core/localization/generated/codegen_loader.g.dart';
 import 'package:test_task/core_ui/theme/app_theme.dart';
 import 'package:test_task/di.dart';
 import 'package:test_task/navigation/router.dart';
@@ -6,7 +8,21 @@ import 'package:test_task/navigation/router.dart';
 void main() async {
   initDependencies();
   await appLocator.allReady();
-  runApp(const MyApp());
+
+  await EasyLocalization.ensureInitialized();
+
+  runApp(
+    EasyLocalization(
+      supportedLocales: [
+        const Locale('en'),
+        const Locale('ru'),
+      ],
+      path: 'assets/translations',
+      fallbackLocale: Locale('en'),
+      assetLoader: CodegenLoader(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -15,6 +31,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       theme: lightTheme,
       routerConfig: router,
     );

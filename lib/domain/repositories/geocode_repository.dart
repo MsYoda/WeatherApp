@@ -1,5 +1,5 @@
 import 'package:test_task/domain/models/city.dart';
 
 abstract interface class GeocodeRepository {
-  Future<City> findCityByName(String name);
+  Future<List<City>> findCitiesByName(String name, String lang, int limit);
 }

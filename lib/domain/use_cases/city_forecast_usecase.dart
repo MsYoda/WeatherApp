@@ -22,13 +22,15 @@ class CityForecastUseCase {
         CachedCity city,
         WeatherInfo weather,
         List<WeatherInfo> forecast,
-      })> getByCityName(String cityName) async {
-    final city = await _geocodeRepository.findCityByName(cityName);
+      })> getByCityName(String cityName, String lang) async {
+    final city = (await _geocodeRepository.findCitiesByName(cityName, lang, 1))[0];
     final weather = await _weatherRemoteRepository.getCurrentWeatherByCoordinates(
       city.coordinates,
+      lang,
     );
     final forecast = await _weatherRemoteRepository.getForecastByCoordinates(
       city.coordinates,
+      lang,
     );
     forecast.sort((a, b) => a.dateTime.compareTo(b.dateTime));
 
@@ -46,16 +48,20 @@ class CityForecastUseCase {
         CachedCity city,
         WeatherInfo weather,
         List<WeatherInfo> forecast,
-      })?> refreshData() async {
-    final cachedCity = await _cacheRepository.getCity();
+      })?> refreshData(String lang) async {
+    var cachedCity = await _cacheRepository.getCity();
     if (cachedCity == null) return null;
 
     final weather = await _weatherRemoteRepository.getCurrentWeatherByCoordinates(
       cachedCity.coordinates,
+      lang,
     );
     final forecast = await _weatherRemoteRepository.getForecastByCoordinates(
       cachedCity.coordinates,
+      lang,
     );
+
+    cachedCity = await _cacheRepository.saveCity(cachedCity);
 
     return (
       city: cachedCity,

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_task/di.dart';
@@ -14,10 +15,15 @@ class WeatherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final lang = context.locale.languageCode;
     return BlocProvider(
       create: (context) => WeatherBloc(
         appLocator.get(),
-      )..add(WeatherRefresh()),
+      )..add(
+          WeatherRefresh(
+            lang: lang,
+          ),
+        ),
       child: Scaffold(
         body: Container(
           width: MediaQuery.sizeOf(context).width,

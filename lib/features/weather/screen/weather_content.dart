@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_task/core/localization/generated/locale_keys.g.dart';
 import 'package:test_task/core_ui/theme/app_dimens.dart';
 import 'package:test_task/core_ui/theme/app_fonts.dart';
 import 'package:test_task/features/weather/bloc/weather_bloc.dart';
@@ -20,16 +24,21 @@ class WeatherContent extends StatefulWidget {
 
 class _WeatherContentState extends State<WeatherContent> {
   late final TextEditingController _cityInputController;
+  Timer? _lastUpdateTimeUpdater;
 
   @override
   void initState() {
     super.initState();
     _cityInputController = TextEditingController();
+    _lastUpdateTimeUpdater = Timer.periodic(const Duration(seconds: 60), (timer) {
+      setState(() {});
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
+    _lastUpdateTimeUpdater?.cancel();
     _cityInputController.dispose();
   }
 
@@ -51,7 +60,7 @@ class _WeatherContentState extends State<WeatherContent> {
                     top: AppDimens.smallSpace,
                   ),
                   child: Text(
-                    'WEATHER APP',
+                    context.tr(LocaleKeys.weather_appName),
                     style: AppFonts.openSans(
                       fontSize: 20,
                       color: colors.primaryContainer,
@@ -71,14 +80,16 @@ class _WeatherContentState extends State<WeatherContent> {
                   onSubmitted: (value) {
                     _cityInputController.clear();
                     bloc.add(
-                      WeatherCityInputSubmitted(),
+                      WeatherCityInputSubmitted(
+                        lang: context.locale.languageCode,
+                      ),
                     );
                   },
                   decoration: InputDecoration(
                     prefixIcon: const Icon(
                       Icons.search,
                     ),
-                    hintText: 'Enter city name',
+                    hintText: context.tr(LocaleKeys.weather_cityInputHint),
                     filled: true,
                     fillColor: colors.primaryContainer.withOpacity(0.8),
                     border: OutlineInputBorder(
@@ -96,13 +107,17 @@ class _WeatherContentState extends State<WeatherContent> {
                 CurrentWeatherView(
                   city: state.city,
                   weatherInfo: state.currentWeather,
-                  onRefreshButtonPressed: () => bloc.add(WeatherRefresh()),
+                  onRefreshButtonPressed: () => bloc.add(
+                    WeatherRefresh(
+                      lang: context.locale.languageCode,
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: AppDimens.largeSpace2x,
                 ),
                 Text(
-                  'Weather forecast',
+                  context.tr(LocaleKeys.weather_weatherForecast),
                   style: AppFonts.openSans(
                     fontSize: 18,
                     color: colors.primaryContainer.withOpacity(1),
@@ -139,7 +154,7 @@ class _WeatherContentState extends State<WeatherContent> {
               else if (state is WeatherError) ...[
                 const SizedBox(height: AppDimens.largeSpace2x),
                 Text(
-                  'Oops, something went wrong',
+                  context.tr(LocaleKeys.weather_errorTitle),
                   textAlign: TextAlign.start,
                   style: AppFonts.openSans(
                     fontSize: 30,
@@ -148,7 +163,7 @@ class _WeatherContentState extends State<WeatherContent> {
                   ),
                 ),
                 Text(
-                  'Try to check your input and try again',
+                  context.tr(LocaleKeys.weather_errorDescription),
                   textAlign: TextAlign.start,
                   style: AppFonts.openSans(
                     fontSize: 16,

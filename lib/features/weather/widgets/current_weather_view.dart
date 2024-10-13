@@ -1,8 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:test_task/core/localization/generated/locale_keys.g.dart';
+
 import 'package:test_task/core_ui/theme/app_dimens.dart';
 import 'package:test_task/core_ui/theme/app_fonts.dart';
 import 'package:test_task/core_ui/theme/app_images.dart';
+import 'package:test_task/core_ui/utils/duration_to_string_mapper.dart';
 import 'package:test_task/domain/models/cached_city.dart';
 import 'package:test_task/domain/models/weather_info.dart';
 
@@ -66,7 +69,7 @@ class CurrentWeatherView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Transform.translate(
-                    offset: const Offset(-10, 0),
+                    offset: const Offset(-7, 0),
                     child: Text(
                       '${weatherInfo.temperature}°',
                       style: AppFonts.openSans(
@@ -91,7 +94,10 @@ class CurrentWeatherView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Last update was ${DateTime.now().difference(city.timestamp)} ago',
+                DurationToLocaleKeyMapper.convertToLocalizedString(
+                  context,
+                  DateTime.now().difference(city.timestamp),
+                ),
                 style: AppFonts.openSans(
                   fontSize: 14,
                   color: Theme.of(context).colorScheme.primaryContainer,
@@ -123,7 +129,7 @@ class CurrentWeatherView extends StatelessWidget {
             ),
           ),
           Text(
-            DateFormat('EEEE d MMMM').format(weatherInfo.dateTime),
+            DateFormat('EEEE d MMMM', context.locale.toString()).format(weatherInfo.dateTime),
             textAlign: TextAlign.start,
             style: AppFonts.openSans(
               fontSize: 16,
@@ -140,13 +146,13 @@ class CurrentWeatherView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildAdditionalInfoColumn(
-                name: 'High',
+                name: context.tr(LocaleKeys.weather_high),
                 value: '${weatherInfo.maxTemperature}°',
                 context: context,
               ),
               const SizedBox(height: AppDimens.defaultSpace),
               _buildAdditionalInfoColumn(
-                name: 'Low',
+                name: context.tr(LocaleKeys.weather_low),
                 value: '${weatherInfo.minTemperature}°',
                 context: context,
               ),
@@ -158,14 +164,19 @@ class CurrentWeatherView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildAdditionalInfoColumn(
-                name: 'Humidity',
+                name: context.tr(LocaleKeys.weather_humidity),
                 value: '${weatherInfo.humidity}%',
                 context: context,
               ),
               const SizedBox(height: AppDimens.defaultSpace),
               _buildAdditionalInfoColumn(
-                name: 'Wind',
-                value: '${weatherInfo.windSpeed}mph',
+                name: context.tr(LocaleKeys.weather_wind),
+                value: context
+                    .plural(
+                      LocaleKeys.weather_kph,
+                      weatherInfo.windSpeed,
+                    )
+                    .replaceAll(' ', ''),
                 context: context,
               ),
             ],

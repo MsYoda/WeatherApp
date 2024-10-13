@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:test_task/data/datasource/geonames_datasource.dart';
 import 'package:test_task/data/datasource/hive_datasource.dart';
 import 'package:test_task/data/datasource/open_weather_datasource.dart';
 import 'package:test_task/data/repositories/cache_hive_repository_impl.dart';
@@ -14,6 +15,10 @@ final appLocator = GetIt.instance;
 void initDependencies() async {
   appLocator.registerLazySingleton(
     () => OpenWeatherDatasource(),
+  );
+
+  appLocator.registerLazySingleton(
+    () => GeonamesDatasource(),
   );
 
   appLocator.registerSingletonAsync(
@@ -32,7 +37,7 @@ void initDependencies() async {
 
   appLocator.registerLazySingleton<GeocodeRepository>(
     () => GeocodeOpenWeatherRepositoryImpl(
-      openWeatherProvider: appLocator.get(),
+      geonamesDatasource: appLocator.get(),
     ),
   );
   appLocator.registerLazySingleton<WeatherRepository>(

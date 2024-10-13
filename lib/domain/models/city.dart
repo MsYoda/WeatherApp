@@ -10,4 +10,16 @@ class City {
     required this.countryCode,
     required this.coordinates,
   });
+
+  City copyWith({
+    String? name,
+    String? countryCode,
+    Coordinates? coordinates,
+  }) {
+    return City(
+      name: name ?? this.name,
+      countryCode: countryCode ?? this.countryCode,
+      coordinates: coordinates ?? this.coordinates,
+    );
+  }
 }

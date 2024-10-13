@@ -10,6 +10,22 @@ class WeatherCityInputChanged extends WeatherEvent {
   });
 }
 
-class WeatherCityInputSubmitted extends WeatherEvent {}
+class WeatherEventWithLang extends WeatherEvent {
+  final String lang;
 
-class WeatherRefresh extends WeatherEvent {}
+  const WeatherEventWithLang({
+    required this.lang,
+  });
+}
+
+class WeatherCityInputSubmitted extends WeatherEventWithLang {
+  const WeatherCityInputSubmitted({
+    required super.lang,
+  });
+}
+
+class WeatherRefresh extends WeatherEventWithLang {
+  const WeatherRefresh({
+    required super.lang,
+  });
+}

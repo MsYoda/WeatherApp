@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:test_task/core/localization/generated/locale_keys.g.dart';
 import 'package:test_task/core_ui/theme/app_dimens.dart';
 import 'package:test_task/core_ui/theme/app_fonts.dart';
 import 'package:test_task/core_ui/theme/app_images.dart';
+import 'package:test_task/core_ui/utils/string_ext.dart';
 import 'package:test_task/domain/models/weather_info.dart';
 
 class WeatherByTimeCard extends StatelessWidget {
@@ -81,23 +83,26 @@ class WeatherByTimeCard extends StatelessWidget {
           ),
           const SizedBox(height: AppDimens.largeSpace),
           _buildDataRow(
-            name: 'Time',
+            name: context.tr(LocaleKeys.weather_time),
             value: DateFormat('HH:00').format(weatherInfo.dateTime),
           ),
           const SizedBox(height: AppDimens.smallSpace),
           _buildDataRow(
-            name: 'Weather',
-            value: weatherInfo.conditionDescription,
+            name: context.tr(LocaleKeys.weather_condition),
+            value: weatherInfo.conditionDescription.capitalize(),
           ),
           const SizedBox(height: AppDimens.smallSpace),
           _buildDataRow(
-            name: 'Humidity',
+            name: context.tr(LocaleKeys.weather_humidity),
             value: '${weatherInfo.humidity}%',
           ),
           const SizedBox(height: AppDimens.smallSpace),
           _buildDataRow(
-            name: 'Wind',
-            value: '${weatherInfo.windSpeed} mph',
+            name: context.tr(LocaleKeys.weather_wind),
+            value: context.plural(
+              LocaleKeys.weather_kph,
+              weatherInfo.windSpeed,
+            ),
           )
         ],
       ),

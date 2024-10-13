@@ -13,18 +13,18 @@ class WeatherOpenWeatherRepositoryImpl implements WeatherRepository {
   }) : _openWeatherProvider = openWeatherProvider;
 
   @override
-  Future<WeatherInfo> getCurrentWeatherByCoordinates(Coordinates coordiantes) async {
+  Future<WeatherInfo> getCurrentWeatherByCoordinates(Coordinates coordiantes, String lang) async {
     final data = await _openWeatherProvider.fetchWeatherByCoordinates(
       CoordinatesMapper.toEntity(coordiantes),
+      lang,
     );
     return WeatherInfoMapper.fromEntity(data);
   }
 
   @override
-  Future<List<WeatherInfo>> getForecastByCoordinates(Coordinates coordiantes) async {
+  Future<List<WeatherInfo>> getForecastByCoordinates(Coordinates coordiantes, String lang) async {
     final data = await _openWeatherProvider.fetchForecastByCoordinates(
-      CoordinatesMapper.toEntity(coordiantes),
-    );
+        CoordinatesMapper.toEntity(coordiantes), lang);
     return data.map(WeatherInfoMapper.fromEntity).toList();
   }
 }
