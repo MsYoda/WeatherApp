@@ -1,4 +1,4 @@
-# Wheather App
+# Weather App
 
 ### In order to run project, you need to run script
 
