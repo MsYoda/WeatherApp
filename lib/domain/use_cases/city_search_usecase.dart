@@ -1,3 +1,4 @@
+import 'package:test_task/core/config/app_config.dart';
 import 'package:test_task/domain/models/city.dart';
 import 'package:test_task/domain/repositories/geocode_repository.dart';
 
@@ -15,7 +16,7 @@ class CitySearchUsecase {
     return _geocodeRepository.findCitiesByName(
       name: input,
       lang: lang,
-      limit: 5,
+      limit: AppConfig.autocompleteRowsLimit,
     );
   }
 }
