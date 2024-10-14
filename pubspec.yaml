@@ -21,6 +21,7 @@ dependencies:
   http: ^1.2.2
   hive: ^2.2.3
   easy_localization: ^3.0.7
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:

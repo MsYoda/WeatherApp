@@ -11,7 +11,11 @@ class GeocodeOpenWeatherRepositoryImpl implements GeocodeRepository {
   }) : _geonamesDatasource = geonamesDatasource;
 
   @override
-  Future<List<City>> findCitiesByName(String name, String lang, int limit) async {
+  Future<List<City>> findCitiesByName({
+    required String name,
+    required String lang,
+    required int limit,
+  }) async {
     final entitiesList = await _geonamesDatasource.findCitiesStartWith(
       cityName: name,
       lang: lang,

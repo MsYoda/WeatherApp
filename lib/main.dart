@@ -13,13 +13,13 @@ void main() async {
 
   runApp(
     EasyLocalization(
-      supportedLocales: [
-        const Locale('en'),
-        const Locale('ru'),
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ru'),
       ],
       path: 'assets/translations',
-      fallbackLocale: Locale('en'),
-      assetLoader: CodegenLoader(),
+      fallbackLocale: const Locale('en'),
+      assetLoader: const CodegenLoader(),
       child: const MyApp(),
     ),
   );

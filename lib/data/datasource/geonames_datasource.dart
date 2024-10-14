@@ -32,7 +32,7 @@ class GeonamesDatasource {
     required String lang,
   }) async {
     final uri = Uri.parse(
-      '$_geonamesAPIUrl/searchJSON?name=$cityName&maxRows=$limit&username=$_apiKey&lang=$lang',
+      '$_geonamesAPIUrl/searchJSON?name_startsWith=$cityName&maxRows=$limit&username=$_apiKey&lang=$lang&featureClass=p&isNameRequired=true',
     );
 
     try {

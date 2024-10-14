@@ -7,9 +7,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_task/core/localization/generated/locale_keys.g.dart';
 import 'package:test_task/core_ui/theme/app_dimens.dart';
 import 'package:test_task/core_ui/theme/app_fonts.dart';
+import 'package:test_task/core_ui/utils/debouncer.dart';
 import 'package:test_task/features/weather/bloc/weather_bloc.dart';
 import 'package:test_task/features/weather/bloc/weather_event.dart';
 import 'package:test_task/features/weather/bloc/weather_state.dart';
+import 'package:test_task/features/weather/screen/city_autocomplete.dart';
 import 'package:test_task/features/weather/widgets/current_weather_view.dart';
 import 'package:test_task/features/weather/widgets/weather_by_time_card.dart';
 
@@ -23,13 +25,14 @@ class WeatherContent extends StatefulWidget {
 }
 
 class _WeatherContentState extends State<WeatherContent> {
-  late final TextEditingController _cityInputController;
+  late final Debouncer _debouncer;
+
   Timer? _lastUpdateTimeUpdater;
 
   @override
   void initState() {
     super.initState();
-    _cityInputController = TextEditingController();
+    _debouncer = Debouncer();
     _lastUpdateTimeUpdater = Timer.periodic(const Duration(seconds: 60), (timer) {
       setState(() {});
     });
@@ -39,7 +42,7 @@ class _WeatherContentState extends State<WeatherContent> {
   void dispose() {
     super.dispose();
     _lastUpdateTimeUpdater?.cancel();
-    _cityInputController.dispose();
+    _debouncer.dispose();
   }
 
   @override
@@ -72,34 +75,8 @@ class _WeatherContentState extends State<WeatherContent> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: AppDimens.smallSpace),
                 width: 600,
-                child: TextField(
-                  controller: _cityInputController,
-                  onChanged: (value) => bloc.add(
-                    WeatherCityInputChanged(value: value),
-                  ),
-                  onSubmitted: (value) {
-                    _cityInputController.clear();
-                    bloc.add(
-                      WeatherCityInputSubmitted(
-                        lang: context.locale.languageCode,
-                      ),
-                    );
-                  },
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(
-                      Icons.search,
-                    ),
-                    hintText: context.tr(LocaleKeys.weather_cityInputHint),
-                    filled: true,
-                    fillColor: colors.primaryContainer.withOpacity(0.8),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppDimens.defaultBorderRadius),
-                      borderSide: BorderSide(
-                        color: colors.secondaryContainer,
-                        width: 1,
-                      ),
-                    ),
-                  ),
+                child: CityAutocomplete(
+                  debouncer: _debouncer,
                 ),
               ),
               if (state is WeatherLoaded) ...[

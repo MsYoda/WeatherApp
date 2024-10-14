@@ -9,6 +9,7 @@ import 'package:test_task/domain/repositories/cache_repository.dart';
 import 'package:test_task/domain/repositories/geocode_repository.dart';
 import 'package:test_task/domain/repositories/weather_repository.dart';
 import 'package:test_task/domain/use_cases/city_forecast_usecase.dart';
+import 'package:test_task/domain/use_cases/city_search_usecase.dart';
 
 final appLocator = GetIt.instance;
 
@@ -51,6 +52,11 @@ void initDependencies() async {
       weatherRemoteRepository: appLocator.get(),
       geocodeRepository: appLocator.get(),
       cacheRepository: appLocator.get(),
+    ),
+  );
+  appLocator.registerLazySingleton<CitySearchUsecase>(
+    () => CitySearchUsecase(
+      geocodeRepository: appLocator.get(),
     ),
   );
 }

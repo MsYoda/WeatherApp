@@ -3,33 +3,14 @@ import 'package:test_task/domain/models/cached_city.dart';
 import 'package:test_task/domain/models/weather_info.dart';
 
 abstract class WeatherState extends Equatable {
-  final String cityInput;
-
-  const WeatherState({
-    required this.cityInput,
-  });
-
-  WeatherState copyWith({String? cityInput});
+  const WeatherState();
 
   @override
-  List<Object?> get props => [
-        cityInput,
-      ];
+  List<Object?> get props => [];
 }
 
 class WeatherInitial extends WeatherState {
-  const WeatherInitial({
-    required super.cityInput,
-  });
-
-  @override
-  WeatherInitial copyWith({
-    String? cityInput,
-  }) {
-    return WeatherInitial(
-      cityInput: cityInput ?? this.cityInput,
-    );
-  }
+  const WeatherInitial();
 }
 
 class WeatherLoaded extends WeatherState {
@@ -38,22 +19,18 @@ class WeatherLoaded extends WeatherState {
   final List<WeatherInfo> weatherForecast;
 
   const WeatherLoaded({
-    required super.cityInput,
     required this.city,
     required this.currentWeather,
     required this.weatherForecast,
   });
 
-  @override
   WeatherLoaded copyWith({
-    String? cityInput,
     WeatherInfo? currentWeather,
     List<WeatherInfo>? weatherForecast,
     CachedCity? city,
   }) {
     return WeatherLoaded(
       city: city ?? this.city,
-      cityInput: cityInput ?? this.cityInput,
       currentWeather: currentWeather ?? this.currentWeather,
       weatherForecast: weatherForecast ?? this.weatherForecast,
     );
@@ -64,31 +41,9 @@ class WeatherLoaded extends WeatherState {
 }
 
 class WeatherLoading extends WeatherState {
-  const WeatherLoading({
-    required super.cityInput,
-  });
-
-  @override
-  WeatherLoading copyWith({
-    String? cityInput,
-  }) {
-    return WeatherLoading(
-      cityInput: cityInput ?? this.cityInput,
-    );
-  }
+  const WeatherLoading();
 }
 
 class WeatherError extends WeatherState {
-  const WeatherError({
-    required super.cityInput,
-  });
-
-  @override
-  WeatherError copyWith({
-    String? cityInput,
-  }) {
-    return WeatherError(
-      cityInput: cityInput ?? this.cityInput,
-    );
-  }
+  const WeatherError();
 }

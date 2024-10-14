@@ -7,11 +7,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final CityForecastUseCase _cityForecastUseCase;
   WeatherBloc(this._cityForecastUseCase)
       : super(
-          const WeatherInitial(
-            cityInput: '',
-          ),
+          const WeatherInitial(),
         ) {
-    on<WeatherCityInputChanged>(_onCityInputChanged);
     on<WeatherCityInputSubmitted>(_onCityInputSubmitted);
     on<WeatherRefresh>(_onWeatherRefresh);
   }
@@ -23,14 +20,13 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       );
       if (data == null) {
         emit(
-          WeatherInitial(cityInput: state.cityInput),
+          const WeatherInitial(),
         );
         return;
       }
 
       emit(
         WeatherLoaded(
-          cityInput: state.cityInput,
           city: data.city,
           currentWeather: data.weather,
           weatherForecast: data.forecast,
@@ -38,33 +34,22 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       );
     } catch (e) {
       emit(
-        WeatherInitial(cityInput: state.cityInput),
+        const WeatherInitial(),
       );
     }
   }
 
-  void _onCityInputChanged(WeatherCityInputChanged event, Emitter<WeatherState> emit) {
-    emit(
-      state.copyWith(
-        cityInput: event.value,
-      ),
-    );
-  }
-
   void _onCityInputSubmitted(WeatherCityInputSubmitted event, Emitter<WeatherState> emit) async {
     emit(
-      WeatherLoading(
-        cityInput: state.cityInput,
-      ),
+      const WeatherLoading(),
     );
     try {
       final data = await _cityForecastUseCase.getByCityName(
-        state.cityInput,
-        event.lang,
+        cityName: event.value,
+        lang: event.lang,
       );
       emit(
         WeatherLoaded(
-          cityInput: state.cityInput,
           city: data.city,
           currentWeather: data.weather,
           weatherForecast: data.forecast,
@@ -72,9 +57,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       );
     } catch (e) {
       emit(
-        WeatherError(
-          cityInput: state.cityInput,
-        ),
+        const WeatherError(),
       );
     }
   }

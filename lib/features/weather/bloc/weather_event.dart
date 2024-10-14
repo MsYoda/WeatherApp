@@ -2,14 +2,6 @@ class WeatherEvent {
   const WeatherEvent();
 }
 
-class WeatherCityInputChanged extends WeatherEvent {
-  final String value;
-
-  const WeatherCityInputChanged({
-    required this.value,
-  });
-}
-
 class WeatherEventWithLang extends WeatherEvent {
   final String lang;
 
@@ -19,7 +11,9 @@ class WeatherEventWithLang extends WeatherEvent {
 }
 
 class WeatherCityInputSubmitted extends WeatherEventWithLang {
+  final String value;
   const WeatherCityInputSubmitted({
+    required this.value,
     required super.lang,
   });
 }

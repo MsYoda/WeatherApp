@@ -22,8 +22,15 @@ class CityForecastUseCase {
         CachedCity city,
         WeatherInfo weather,
         List<WeatherInfo> forecast,
-      })> getByCityName(String cityName, String lang) async {
-    final city = (await _geocodeRepository.findCitiesByName(cityName, lang, 1))[0];
+      })> getByCityName({
+    required String cityName,
+    required String lang,
+  }) async {
+    final city = (await _geocodeRepository.findCitiesByName(
+      name: cityName,
+      lang: lang,
+      limit: 1,
+    ))[0];
     final weather = await _weatherRemoteRepository.getCurrentWeatherByCoordinates(
       city.coordinates,
       lang,
