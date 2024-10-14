@@ -34,6 +34,41 @@ class CityAutocomplete extends StatelessWidget {
 
         return result.map((e) => '${e.name}, ${e.countryCode}');
       },
+      optionsViewBuilder: (context, onSelected, options) {
+        return LayoutBuilder(builder: (context, constraints) {
+          print(constraints.maxWidth);
+          return Transform.translate(
+            offset: const Offset(1, 0),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Material(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(4.0)),
+                ),
+                child: Container(
+                  height: 52.0 * options.length,
+                  width: constraints.maxWidth >= 565
+                      ? 565
+                      : constraints.maxWidth - AppDimens.defaultSpace * 2,
+                  child: ListView.builder(
+                    itemCount: options.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final String option = options.elementAt(index);
+                      return InkWell(
+                        onTap: () => onSelected(option),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Text(option),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+      },
       onSelected: (option) {
         bloc.add(
           WeatherCityInputSubmitted(

@@ -3,29 +3,32 @@
         "appName": "WEATHER APP",
         "cityInputHint": "Enter city name",
         "lastUpdateTimeMinute": {
-            "zero": "Last update was < 1 minutes ago",
+            "zero": "Last update was {} minutes ago",
             "one": "Last update was {} minute ago",
             "two": "Last update was {} minutes ago",
             "few": "Last update was {} minutes ago",
             "many": "Last update was {} minutes ago",
             "other": "Last update was {} minutes ago"
         },
+        "lastUpdateTimeMinuteZero": "Last update was < 1 minute ago",
         "lastUpdateTimeHour": {
-            "zero": "Last update was < 1 hours ago",
+            "zero": "Last update was {} hours ago",
             "one": "Last update was {} hour ago",
             "two": "Last update was {} hours ago",
             "few": "Last update was {} hours ago",
             "many": "Last update was {} hours ago",
             "other": "Last update was {} hours ago"
         },
+        "lastUpdateTimeHourZero": "Last update was < 1 hour ago",
         "lastUpdateTimeDay": {
-            "zero": "Last update was < 1 days ago",
+            "zero": "Last update was {} days ago",
             "one": "Last update was {} day ago",
             "two": "Last update was {} days ago",
             "few": "Last update was {} days ago",
             "many": "Last update was {} days ago",
             "other": "Last update was {} days ago"
         },
+        "lastUpdateTimeDayZero": "Last update was < 1 day ago",
         "kph": {
             "other": "{} kph"
         },

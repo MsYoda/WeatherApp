@@ -7,7 +7,7 @@ import 'package:test_task/di.dart';
 import 'package:test_task/features/weather/bloc/weather_bloc.dart';
 import 'package:test_task/features/weather/bloc/weather_event.dart';
 import 'package:test_task/features/weather/provider/city_autocomplete_provider.dart';
-import 'package:test_task/features/weather/widgets/weather_content.dart';
+import 'package:test_task/features/weather/screen/weather_content.dart';
 
 class WeatherScreen extends StatelessWidget {
   const WeatherScreen({

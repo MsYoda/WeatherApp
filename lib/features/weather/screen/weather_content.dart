@@ -11,7 +11,7 @@ import 'package:test_task/core_ui/utils/debouncer.dart';
 import 'package:test_task/features/weather/bloc/weather_bloc.dart';
 import 'package:test_task/features/weather/bloc/weather_event.dart';
 import 'package:test_task/features/weather/bloc/weather_state.dart';
-import 'package:test_task/features/weather/screen/city_autocomplete.dart';
+import 'package:test_task/features/weather/widgets/city_autocomplete.dart';
 import 'package:test_task/features/weather/widgets/current_weather_view.dart';
 import 'package:test_task/features/weather/widgets/weather_by_time_card.dart';
 
@@ -33,7 +33,7 @@ class _WeatherContentState extends State<WeatherContent> {
   void initState() {
     super.initState();
     _debouncer = Debouncer();
-    _lastUpdateTimeUpdater = Timer.periodic(const Duration(seconds: 60), (timer) {
+    _lastUpdateTimeUpdater = Timer.periodic(const Duration(seconds: 30), (timer) {
       setState(() {});
     });
   }
