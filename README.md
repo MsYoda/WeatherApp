@@ -8,5 +8,7 @@
 
 ### Run project with command
 
-```flutter run --dart-define-from-file=dart_define.json```
+```
+flutter run --dart-define-from-file=dart_define.json
+```
 
