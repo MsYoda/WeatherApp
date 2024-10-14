@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:test_task/core/config/dart_define.gen.dart';
 import 'package:test_task/data/entities/city_entity.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_task/data/entities/coordinates_entity.dart';
@@ -8,7 +9,7 @@ import 'package:test_task/domain/exceptions/app_exception.dart';
 
 class GeonamesDatasource {
   static const _geonamesAPIUrl = 'https://secure.geonames.org/';
-  static const _apiKey = 'Racesas';
+  static const _apiKey = DartDefine.geonamesUsername;
 
   List<CityEntity> _citiesFromGeocode(List data) {
     return data

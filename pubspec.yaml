@@ -29,6 +29,7 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   build_runner: ^2.4.11
   hive_generator: ^2.0.1
+  dart_define: ^2.1.1
 
 
 flutter:
@@ -38,3 +39,26 @@ flutter:
   assets:
     - assets/icons/
     - lib/core/localization/
+
+
+dart_define:
+    dart: true
+    json: true
+
+    dart_path: lib/core/config/dart_define.gen.dart
+    json_path: dart_define.json
+    class_name: dart_define
+
+    variables:
+
+        - name: OPENWEATHER_KEY
+
+          description: Open Weather API key
+
+          required: true
+
+        - name: GEONAMES_USERNAME
+
+          description: Geonames username
+
+          required: true

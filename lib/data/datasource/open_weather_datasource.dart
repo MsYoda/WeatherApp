@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:test_task/core/config/dart_define.gen.dart';
 import 'package:test_task/data/entities/coordinates_entity.dart';
 import 'package:test_task/data/entities/weather_info_entity.dart';
 import 'package:http/http.dart' as http;
@@ -8,7 +9,7 @@ import 'package:test_task/domain/exceptions/app_exception.dart';
 
 class OpenWeatherDatasource {
   static const _openWeatherAPIUrl = 'https://api.openweathermap.org/data/2.5/';
-  static const _apiKey = 'dd2d47e33af0d49102831009fd2ecddd';
+  static const _apiKey = DartDefine.openweatherKey;
 
   List<WeatherInfoEntity> _weatherInfoFromForecast(Map<String, dynamic> data) {
     final List forecasts = data['list'];
