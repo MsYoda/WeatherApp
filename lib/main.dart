@@ -13,6 +13,7 @@ void main() async {
 
   runApp(
     EasyLocalization(
+      ignorePluralRules: false,
       supportedLocales: const [
         Locale('en'),
         Locale('ru'),
