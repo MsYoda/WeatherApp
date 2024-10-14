@@ -36,7 +36,6 @@ class CityAutocomplete extends StatelessWidget {
       },
       optionsViewBuilder: (context, onSelected, options) {
         return LayoutBuilder(builder: (context, constraints) {
-          print(constraints.maxWidth);
           return Transform.translate(
             offset: const Offset(1, 0),
             child: Align(
@@ -45,7 +44,7 @@ class CityAutocomplete extends StatelessWidget {
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(bottom: Radius.circular(4.0)),
                 ),
-                child: Container(
+                child: SizedBox(
                   height: 52.0 * options.length,
                   width: constraints.maxWidth >= 565
                       ? 565
@@ -57,7 +56,7 @@ class CityAutocomplete extends StatelessWidget {
                       return InkWell(
                         onTap: () => onSelected(option),
                         child: Padding(
-                          padding: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(AppDimens.defaultSpace),
                           child: Text(option),
                         ),
                       );

@@ -84,7 +84,11 @@ class WeatherByTimeCard extends StatelessWidget {
           const SizedBox(height: AppDimens.largeSpace),
           _buildDataRow(
             name: context.tr(LocaleKeys.weather_time),
-            value: DateFormat('HH:00').format(weatherInfo.dateTime),
+            value: DateFormat('HH:00').format(
+              weatherInfo.dateTime.toUtc().add(
+                    Duration(seconds: weatherInfo.timezone),
+                  ),
+            ),
           ),
           const SizedBox(height: AppDimens.smallSpace),
           _buildDataRow(

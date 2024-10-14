@@ -7,8 +7,10 @@ class WeatherInfo {
   final String conditionDescription;
   final double windSpeed;
   final DateTime dateTime;
+  final int timezone;
 
   const WeatherInfo({
+    required this.timezone,
     required this.maxTemperature,
     required this.minTemperature,
     required this.humidity,
@@ -28,6 +30,7 @@ class WeatherInfo {
     String? conditionDescription,
     double? windSpeed,
     DateTime? dateTime,
+    int? timezone,
   }) {
     return WeatherInfo(
       temperature: temperature ?? this.temperature,
@@ -38,6 +41,7 @@ class WeatherInfo {
       conditionDescription: conditionDescription ?? this.conditionDescription,
       windSpeed: windSpeed ?? this.windSpeed,
       dateTime: dateTime ?? this.dateTime,
+      timezone: timezone ?? this.timezone,
     );
   }
 }

@@ -20,6 +20,8 @@ class WeatherInfoEntity extends HiveObject {
   final double windSpeed;
   @HiveField(7)
   final DateTime dateTime;
+  @HiveField(8)
+  final int timezone;
 
   WeatherInfoEntity({
     required this.maxTemperature,
@@ -30,6 +32,7 @@ class WeatherInfoEntity extends HiveObject {
     required this.conditionDescription,
     required this.windSpeed,
     required this.dateTime,
+    required this.timezone,
   });
 
   factory WeatherInfoEntity.fromJson(Map<String, dynamic> json) {
@@ -42,6 +45,7 @@ class WeatherInfoEntity extends HiveObject {
       conditionDescription: json['conditionDescription'] as String,
       windSpeed: (json['windSpeed'] as num).toDouble(),
       dateTime: DateTime.parse(json['dateTime'] as String),
+      timezone: json['timezone'] as int,
     );
   }
 }

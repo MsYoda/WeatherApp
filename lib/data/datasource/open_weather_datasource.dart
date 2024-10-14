@@ -13,36 +13,34 @@ class OpenWeatherDatasource {
 
   List<WeatherInfoEntity> _weatherInfoFromForecast(Map<String, dynamic> data) {
     final List forecasts = data['list'];
-    return forecasts.map((forecast) {
-      return WeatherInfoEntity(
-        temperature: (forecast['main']['temp'] as num).toInt(),
-        minTemperature: (forecast['main']['temp_min'] as num).toInt(),
-        maxTemperature: (forecast['main']['temp_max'] as num).toInt(),
-        humidity: (forecast['main']['humidity'] as num).toDouble(),
-        conditionType: forecast['weather'][0]['icon'] as String,
-        conditionDescription: forecast['weather'][0]['description'] as String,
-        windSpeed: (forecast['wind']['speed'] as num).toDouble(),
-        dateTime: DateTime.fromMillisecondsSinceEpoch((forecast['dt'] as int) * 1000).toUtc().add(
-              Duration(seconds: data['city']['timezone'] as int),
-            ),
-      );
-    }).toList();
+    return forecasts.map(
+      (forecast) {
+        return WeatherInfoEntity(
+          temperature: (forecast['main']['temp'] as num).round(),
+          minTemperature: (forecast['main']['temp_min'] as num).round(),
+          maxTemperature: (forecast['main']['temp_max'] as num).round(),
+          humidity: (forecast['main']['humidity'] as num).toDouble(),
+          conditionType: forecast['weather'][0]['icon'] as String,
+          conditionDescription: forecast['weather'][0]['description'] as String,
+          windSpeed: (forecast['wind']['speed'] as num).toDouble(),
+          dateTime: DateTime.fromMillisecondsSinceEpoch((forecast['dt'] as int) * 1000),
+          timezone: data['city']['timezone'] as int,
+        );
+      },
+    ).toList();
   }
 
   WeatherInfoEntity _weatherInfoFromCurrent(Map<String, dynamic> data) {
     return WeatherInfoEntity(
-      temperature: (data['main']['temp'] as num).toInt(),
-      minTemperature: (data['main']['temp_min'] as num).toInt(),
-      maxTemperature: (data['main']['temp_max'] as num).toInt(),
+      temperature: (data['main']['temp'] as num).round(),
+      minTemperature: (data['main']['temp_min'] as num).round(),
+      maxTemperature: (data['main']['temp_max'] as num).round(),
       humidity: (data['main']['humidity'] as num).toDouble(),
       conditionType: data['weather'][0]['icon'] as String,
       conditionDescription: data['weather'][0]['description'] as String,
       windSpeed: (data['wind']['speed'] as num).toDouble(),
-      dateTime: DateTime.fromMillisecondsSinceEpoch((data['dt'] as int) * 1000).toUtc().add(
-            Duration(
-              seconds: data['timezone'] as int,
-            ),
-          ),
+      dateTime: DateTime.fromMillisecondsSinceEpoch((data['dt'] as int) * 1000),
+      timezone: data['timezone'] as int,
     );
   }
 

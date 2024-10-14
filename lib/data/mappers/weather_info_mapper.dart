@@ -12,6 +12,7 @@ abstract class WeatherInfoMapper {
       conditionDescription: entity.conditionDescription,
       windSpeed: entity.windSpeed,
       dateTime: entity.dateTime,
+      timezone: entity.timezone,
     );
   }
 
@@ -25,6 +26,7 @@ abstract class WeatherInfoMapper {
       conditionDescription: model.conditionDescription,
       windSpeed: model.windSpeed,
       dateTime: model.dateTime,
+      timezone: model.timezone,
     );
   }
 }
